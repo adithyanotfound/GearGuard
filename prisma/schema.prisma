@@ -1,0 +1,168 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  TECHNICIAN
+  EMPLOYEE
+}
+
+enum RequestStage {
+  NEW
+  IN_PROGRESS
+  REPAIRED
+  SCRAP
+}
+
+enum MaintenanceType {
+  PREVENTIVE
+  CORRECTIVE
+  EMERGENCY
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum StatusDot {
+  WHITE
+  RED
+  GREEN
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      Role     @default(EMPLOYEE)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  createdRequests MaintenanceRequest[] @relation("RequestCreator")
+  assignedRequests MaintenanceRequest[] @relation("AssignedTechnician")
+  notes           RequestNote[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model Equipment {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  serialNumber String? @unique
+  health      Int      @default(100) // 0-100 percentage
+  isActive    Boolean  @default(true)
+  categoryId  String
+  workCenterId String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  category      EquipmentCategory @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  workCenter    WorkCenter?      @relation(fields: [workCenterId], references: [id], onDelete: SetNull)
+  requests      MaintenanceRequest[]
+
+  @@index([categoryId])
+  @@index([workCenterId])
+  @@index([isActive])
+}
+
+model EquipmentCategory {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  equipment   Equipment[]
+  requests    MaintenanceRequest[]
+}
+
+model Team {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  requests    MaintenanceRequest[]
+}
+
+model WorkCenter {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  location    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  equipment   Equipment[]
+  requests    MaintenanceRequest[]
+}
+
+model MaintenanceRequest {
+  id            String          @id @default(cuid())
+  subject       String
+  description   String?
+  stage         RequestStage    @default(NEW)
+  priority      Priority        @default(MEDIUM)
+  maintenanceType MaintenanceType @default(CORRECTIVE)
+  statusDot     StatusDot       @default(WHITE)
+  
+  equipmentId   String?
+  workCenterId  String?
+  categoryId    String?
+  teamId        String?
+  
+  createdById   String
+  assignedToId  String?
+  
+  scheduledDate DateTime?
+  duration      Int?            // in minutes
+  completedAt   DateTime?
+  
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  createdBy     User            @relation("RequestCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  assignedTo    User?           @relation("AssignedTechnician", fields: [assignedToId], references: [id], onDelete: SetNull)
+  equipment     Equipment?      @relation(fields: [equipmentId], references: [id], onDelete: SetNull)
+  workCenter    WorkCenter?     @relation(fields: [workCenterId], references: [id], onDelete: SetNull)
+  category      EquipmentCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  team          Team?           @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  notes         RequestNote[]
+
+  @@index([stage])
+  @@index([createdById])
+  @@index([assignedToId])
+  @@index([equipmentId])
+  @@index([priority])
+}
+
+model RequestNote {
+  id          String   @id @default(cuid())
+  content     String
+  requestId   String
+  createdById String
+  createdAt   DateTime @default(now())
+
+  request     MaintenanceRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  createdBy   User              @relation(fields: [createdById], references: [id], onDelete: Restrict)
+
+  @@index([requestId])
+}
+
