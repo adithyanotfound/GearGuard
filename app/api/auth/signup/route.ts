@@ -19,6 +19,7 @@ const signupSchema = z.object({
     }
   ),
   retypePassword: z.string(),
+  role: z.enum(['EMPLOYEE', 'TECHNICIAN', 'MANAGER', 'ADMIN']).optional(),
 }).refine((data) => data.password === data.retypePassword, {
   message: "Passwords don't match",
   path: ['retypePassword'],
@@ -36,7 +37,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const { name, email, password } = validation.data
+    const { name, email, password, role } = validation.data
 
     // Check if email already exists
     const existingUser = await prisma.user.findUnique({
@@ -52,12 +53,17 @@ export async function POST(request: NextRequest) {
 
     const hashedPassword = await hashPassword(password)
 
+    // Validate role and default to EMPLOYEE if not provided or invalid
+    const userRole = role && Object.values(Role).includes(role as Role) 
+      ? (role as Role) 
+      : Role.EMPLOYEE
+
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        role: Role.EMPLOYEE, // Default role
+        role: userRole,
       },
     })
 

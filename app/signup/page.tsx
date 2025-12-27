@@ -7,6 +7,13 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useToast } from '@/components/ui/use-toast'
 
 export default function SignupPage() {
@@ -17,6 +24,7 @@ export default function SignupPage() {
     email: '',
     password: '',
     retypePassword: '',
+    role: 'EMPLOYEE',
   })
   const [loading, setLoading] = useState(false)
 
@@ -124,6 +132,26 @@ export default function SignupPage() {
                 required
                 className="border-black"
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="role" className="text-black">Role</Label>
+              <Select
+                value={formData.role}
+                onValueChange={(value) => setFormData({ ...formData, role: value })}
+              >
+                <SelectTrigger className="border-black">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="EMPLOYEE">Employee</SelectItem>
+                  <SelectItem value="TECHNICIAN">Technician</SelectItem>
+                  <SelectItem value="MANAGER">Manager</SelectItem>
+                  <SelectItem value="ADMIN">Admin</SelectItem>
+                </SelectContent>
+              </Select>
+              <p className="text-xs text-black">
+                Note: Default role is Employee. Admins can change roles later.
+              </p>
             </div>
             <Button type="submit" className="w-full bg-black text-white hover:bg-black/90" disabled={loading}>
               {loading ? 'Creating account...' : 'Sign Up'}

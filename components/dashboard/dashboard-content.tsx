@@ -180,15 +180,15 @@ export function DashboardContent({ user }: DashboardContentProps) {
                       filteredRequests.map((req) => (
                         <tr
                           key={req.id}
-                          className="border-b border-black cursor-pointer hover:bg-black hover:text-white"
+                          className="border-b border-black cursor-pointer hover:bg-black group transition-colors"
                           onClick={() => router.push(`/requests/${req.id}`)}
                         >
-                          <td className="p-2">{req.subject}</td>
-                          <td className="p-2">{req.createdBy.name}</td>
-                          <td className="p-2">{req.assignedTo?.name || '-'}</td>
-                          <td className="p-2">{req.category?.name || '-'}</td>
-                          <td className="p-2">{req.stage}</td>
-                          <td className="p-2">{req.team?.name || '-'}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.subject}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.createdBy.name}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.assignedTo?.name || '-'}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.category?.name || '-'}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.stage}</td>
+                          <td className="p-2 text-black group-hover:text-white transition-colors">{req.team?.name || '-'}</td>
                         </tr>
                       ))
                     )}

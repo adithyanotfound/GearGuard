@@ -290,14 +290,14 @@ export function EquipmentManagement() {
               <div className="space-y-2">
                 <Label htmlFor="workCenterId" className="text-black">Work Center</Label>
                 <Select
-                  value={formData.workCenterId}
-                  onValueChange={(value) => setFormData({ ...formData, workCenterId: value })}
+                  value={formData.workCenterId || 'none'}
+                  onValueChange={(value) => setFormData({ ...formData, workCenterId: value === 'none' ? '' : value })}
                 >
                   <SelectTrigger className="border-black">
                     <SelectValue placeholder="Select work center" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">None</SelectItem>
+                    <SelectItem value="none">None</SelectItem>
                     {workCenters.map((wc) => (
                       <SelectItem key={wc.id} value={wc.id}>
                         {wc.name}

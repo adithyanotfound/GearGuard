@@ -86,32 +86,32 @@ export function RequestsList({ user }: RequestsListProps) {
             requests.map((req) => (
               <Card
                 key={req.id}
-                className="border-2 border-black cursor-pointer hover:bg-black hover:text-white"
+                className="border-2 border-black cursor-pointer hover:bg-black group transition-colors"
                 onClick={() => router.push(`/requests/${req.id}`)}
               >
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <CardTitle className="text-black">{req.subject}</CardTitle>
-                    <span className="text-sm text-black">{req.stage}</span>
+                    <CardTitle className="text-black group-hover:text-white transition-colors">{req.subject}</CardTitle>
+                    <span className="text-sm text-black group-hover:text-white transition-colors">{req.stage}</span>
                   </div>
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                     <div>
-                      <p className="font-semibold text-black">Employee</p>
-                      <p className="text-black">{req.createdBy.name}</p>
+                      <p className="font-semibold text-black group-hover:text-white transition-colors">Employee</p>
+                      <p className="text-black group-hover:text-white transition-colors">{req.createdBy.name}</p>
                     </div>
                     <div>
-                      <p className="font-semibold text-black">Technician</p>
-                      <p className="text-black">{req.assignedTo?.name || '-'}</p>
+                      <p className="font-semibold text-black group-hover:text-white transition-colors">Technician</p>
+                      <p className="text-black group-hover:text-white transition-colors">{req.assignedTo?.name || '-'}</p>
                     </div>
                     <div>
-                      <p className="font-semibold text-black">Priority</p>
-                      <p className="text-black">{req.priority}</p>
+                      <p className="font-semibold text-black group-hover:text-white transition-colors">Priority</p>
+                      <p className="text-black group-hover:text-white transition-colors">{req.priority}</p>
                     </div>
                     <div>
-                      <p className="font-semibold text-black">Category</p>
-                      <p className="text-black">{req.category?.name || '-'}</p>
+                      <p className="font-semibold text-black group-hover:text-white transition-colors">Category</p>
+                      <p className="text-black group-hover:text-white transition-colors">{req.category?.name || '-'}</p>
                     </div>
                   </div>
                 </CardContent>

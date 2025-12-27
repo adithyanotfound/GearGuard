@@ -366,14 +366,14 @@ export function RequestDetail({ requestId, user }: RequestDetailProps) {
                   <div>
                     <Label className="text-black">Assigned Technician</Label>
                     <Select
-                      value={request.assignedToId || ''}
-                      onValueChange={(value) => handleUpdate({ assignedToId: value || null })}
+                      value={request.assignedToId || 'unassigned'}
+                      onValueChange={(value) => handleUpdate({ assignedToId: value === 'unassigned' ? null : value })}
                     >
                       <SelectTrigger className="border-black mt-2">
                         <SelectValue placeholder="Unassigned" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Unassigned</SelectItem>
+                        <SelectItem value="unassigned">Unassigned</SelectItem>
                         {users.map((u) => (
                           <SelectItem key={u.id} value={u.id}>
                             {u.name}
