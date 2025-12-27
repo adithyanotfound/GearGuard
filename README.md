@@ -2,6 +2,13 @@
 
 A comprehensive enterprise maintenance management system built with Next.js, TypeScript, Prisma, and PostgreSQL.
 
+## Team
+
+- Sarthak Jha (Sarthak696969) - Team Leader
+- Adithya (adithyanotfound)
+- Raghav Tiwari (RaghavTiwari31)
+- Harshit Jain (HarshitJain2103)
+
 ## Features
 
 - **Role-Based Access Control (RBAC)**: Four distinct roles (ADMIN, MANAGER, TECHNICIAN, EMPLOYEE) with granular permissions
@@ -163,10 +170,3 @@ npm run db:seed      # Seed database
 ## License
 
 This project is part of the Runtime Terrors team submission.
-
-## Team
-
-- Sarthak Jha (Sarthak696969) - Team Leader
-- Adithya (adithyanotfound)
-- Raghav Tiwari (RaghavTiwari31)
-- Harshit Jain (HarshitJain2103)
